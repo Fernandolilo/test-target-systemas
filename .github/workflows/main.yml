@@ -25,12 +25,11 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
-          key: maven-${{ hashFiles('**/pom.xml') }}
+          key: maven-${{ hashFiles('pom.xml') }}
           restore-keys: maven-
 
       - name: Build and run tests with coverage
         run: mvn clean verify jacoco:report
-       
 
       # DOCKER: Login & Push
       - name: Log in to Docker Hub
@@ -41,5 +40,3 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/target:latest .
-       
-

@@ -7,7 +7,6 @@ spring:
     username: sa
     password: 
     driverClassName: org.h2.Driver
-
   jpa:
     show-sql: true
     ddl-auto: update

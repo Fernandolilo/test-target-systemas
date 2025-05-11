@@ -21,7 +21,6 @@ public class VendaServiceImpl implements VendaService {
 	@Override
 	public VendaDTO save(VendaNewDTO dto) {
 		Venda venda = mapper.map(dto, Venda.class);
-		
 		venda = repository.save(venda);
 		return mapper.map(venda, VendaDTO.class);
 	}

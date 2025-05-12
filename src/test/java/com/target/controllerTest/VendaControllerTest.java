@@ -1,6 +1,10 @@
 package com.target.controllerTest;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.target.controller.VendaController;
 import com.target.entity.Venda;
 import com.target.entity.dto.VendaDTO;
+import com.target.entity.dto.VendaDTOWrapper;
 import com.target.entity.dto.VendaNewDTO;
 import com.target.service.VendaService;
 
@@ -60,5 +65,39 @@ public class VendaControllerTest {
 		mockMvc.perform(request).andExpect(status().isCreated());
 
 	}
+	
+	@Test
+	public void findAll() throws Exception {
+		VendaDTO vendaDTO = VendaDTO.builder().dia(1).valor(1.1).build();
+		VendaDTOWrapper wrapper = new VendaDTOWrapper();
+		
+		wrapper.setVendas(List.of(vendaDTO));
+		when(service.vendas()).thenReturn(List.of(wrapper));
+		
+		String json = new ObjectMapper().writeValueAsString(wrapper);
+		
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(json);
+		
+		mockMvc.perform(request).andExpect(status().isOk())
+		.andExpect(jsonPath("$[0].vendas[0].dia").value(1))
+        .andExpect(jsonPath("$[0].vendas[0].valor").value(1.1));
+	}
+	
+	public void findAllNotFounf() throws Exception {
+		VendaDTO vendaDTO = VendaDTO.builder().build();
+		VendaDTOWrapper wrapper = new VendaDTOWrapper();
+		
+		wrapper.setVendas(List.of(vendaDTO));
+		when(service.vendas()).thenReturn(List.of(wrapper));
+		
+		String json = new ObjectMapper().writeValueAsString(wrapper);
+		
+		MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(API).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(json);
+		
+		mockMvc.perform(request).andExpect(status().isNotFound());
+	}
+
 
 }

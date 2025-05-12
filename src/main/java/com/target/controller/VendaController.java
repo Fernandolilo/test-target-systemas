@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.target.entity.dto.VendaDTO;
+import com.target.entity.dto.VendaDTOWrapper;
 import com.target.entity.dto.VendaNewDTO;
 import com.target.service.VendaService;
 
@@ -30,8 +31,8 @@ public class VendaController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(result);
 	}
 	
-	@GetMapping
-	public List<VendaDTO> findAll (){
+	@GetMapping(produces = { "application/json", "application/xml" })
+	public List<VendaDTOWrapper> findAll (){
 		return service.vendas();
 		
 	}

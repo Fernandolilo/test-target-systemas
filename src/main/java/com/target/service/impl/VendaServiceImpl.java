@@ -1,5 +1,6 @@
 package com.target.service.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.target.entity.Venda;
 import com.target.entity.dto.VendaDTO;
+import com.target.entity.dto.VendaDTOWrapper;
 import com.target.entity.dto.VendaNewDTO;
 import com.target.repositories.VendaRepository;
 import com.target.service.VendaService;
@@ -30,14 +32,23 @@ public class VendaServiceImpl implements VendaService {
 	}
 
 	@Override
-	public List<VendaDTO> vendas() {
+	public List<VendaDTOWrapper> vendas() {
 		List<Venda> vendas = repository.findAll();
-		
+					
 		// ordena por dia comparator.comparin ordena por dia,
 		List<VendaDTO> vendasDTO = vendas.stream()
-				.sorted(Comparator.comparing(Venda::getDia)) 
-																								// crescente
-				.map(venda -> mapper.map(venda, VendaDTO.class)).collect(Collectors.toList());
-		return vendasDTO;
+				.sorted(Comparator.comparing(Venda::getDia)) 																								// crescente
+				.map(venda -> mapper
+						.map(venda, VendaDTO.class))
+						.collect(Collectors.toList());
+		
+		//metodo e class feita para formatar xml
+	    VendaDTOWrapper wrapper = new VendaDTOWrapper();
+	    wrapper.setVendas(vendasDTO);
+
+	    List<VendaDTOWrapper> listaWrapper = new ArrayList<>();
+	    listaWrapper.add(wrapper);
+
+	    return listaWrapper;
 	}
 }

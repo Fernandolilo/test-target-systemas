@@ -1,5 +1,9 @@
 package com.target.service.impl;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +27,17 @@ public class VendaServiceImpl implements VendaService {
 		Venda venda = mapper.map(dto, Venda.class);
 		venda = repository.save(venda);
 		return mapper.map(venda, VendaDTO.class);
+	}
+
+	@Override
+	public List<VendaDTO> vendas() {
+		List<Venda> vendas = repository.findAll();
+		
+		// ordena por dia comparator.comparin ordena por dia,
+		List<VendaDTO> vendasDTO = vendas.stream()
+				.sorted(Comparator.comparing(Venda::getDia)) 
+																								// crescente
+				.map(venda -> mapper.map(venda, VendaDTO.class)).collect(Collectors.toList());
+		return vendasDTO;
 	}
 }

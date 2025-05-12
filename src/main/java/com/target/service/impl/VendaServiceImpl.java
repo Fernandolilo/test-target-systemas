@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.ObjectDeletedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import com.target.entity.dto.VendaDTOWrapper;
 import com.target.entity.dto.VendaNewDTO;
 import com.target.repositories.VendaRepository;
 import com.target.service.VendaService;
+import com.target.service.exceptions.ObjectNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +37,9 @@ public class VendaServiceImpl implements VendaService {
 	public List<VendaDTOWrapper> vendas() {
 		List<Venda> vendas = repository.findAll();
 					
+		if(vendas.isEmpty()) {
+			throw new ObjectNotFoundException("Não há vendas. ");
+		}
 		// ordena por dia comparator.comparin ordena por dia,
 		List<VendaDTO> vendasDTO = vendas.stream()
 				.sorted(Comparator.comparing(Venda::getDia)) 																								// crescente

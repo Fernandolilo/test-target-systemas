@@ -19,7 +19,7 @@ public class StarDBImpl implements StartDB {
 
 	@Override
 	public void initDB() {
-
+/*
 		List<Venda> pedidos = Arrays.asList(Venda.builder().dia(1).valor(22174.1664).build(),
 				Venda.builder().dia(2).valor(24537.6698).build(), Venda.builder().dia(3).valor(26139.6134).build(),
 				Venda.builder().dia(4).valor(0.0).build(), Venda.builder().dia(5).valor(0.0).build(),
@@ -39,7 +39,7 @@ public class StarDBImpl implements StartDB {
 
 		repository.saveAll(pedidos);
 		Venda ped = Venda.builder().dia(31).valor(8414.61).build();
-		repository.save(ped);
+		repository.save(ped); */
 	} 
 	
 }
